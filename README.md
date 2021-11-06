@@ -46,6 +46,28 @@ The file `showall.rs` inside `examples` show almost all parameters for the API. 
 
     $ cargo run --example showall
 
+## CLI utility
+
+There is a CLI utility bundled with the API called `ipify`. 
+```
+ipify 0.1.0
+
+Ollivier Robert <roberto@keltia.net>
+
+Rust CLI for IPIFY API.
+
+USAGE:
+  ipify.exe [OPTIONS]
+
+OPTIONS:
+  -4, --ipv4       Force getting IPv4
+  -6, --ipv6       Force getting IPv6
+  -h, --help       Print help information
+  -J, --json       Request JSON output
+  -q, --quiet      Quiet mode
+  -V, --version    Display version and exit
+```
+
 ## crates.io
 
 You can use this package in your project by adding the following
