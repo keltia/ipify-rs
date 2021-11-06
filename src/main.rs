@@ -42,14 +42,14 @@ impl<'a> Api<'a> {
         match self.t {
             Engine::Ureq => {
                 let c = AgentBuilder::new().user_agent("ipify/1.0.0").build();
-                return c.get(self.endp).call().unwrap().into_string().unwrap()
+                return c.get(self.endp).call().unwrap().into_string().unwrap();
             }
             Engine::Reqw => {
                 let c = reqwest::blocking::ClientBuilder::new()
                     .user_agent("ipify/1.0.0")
                     .build()
                     .unwrap();
-                return c.get(self.endp).send().unwrap().text().unwrap()
+                return c.get(self.endp).send().unwrap().text().unwrap();
             }
         };
     }
