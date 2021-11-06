@@ -12,14 +12,14 @@ enum Engine {
 }
 
 #[derive(Clone, Copy, Debug)]
-struct Api<'a> {
+struct Ipify<'a> {
     pub t: Engine,
     pub endp: &'a str,
 }
 
-impl<'a> Api<'a> {
+impl<'a> Ipify<'a> {
     fn new(t: Engine) -> Self {
-        Api { t, endp: ENDPOINT6 }
+        Ipify { t, endp: ENDPOINT6 }
     }
 
     fn set(mut self, op: Op) -> Self {
@@ -57,7 +57,7 @@ enum Op {
     IP6J,
 }
 
-fn doit(a: &Api) {
+fn doit(a: &Ipify) {
     let ip4 = a.set(Op::IP4).call();
     let ip6 = a.set(Op::IP6).call();
 
@@ -74,10 +74,10 @@ fn main() {
     info!("Start");
 
     info!("Using ureq");
-    let a = Api::new(Engine::Ureq);
+    let a = Ipify::new(Engine::Ureq);
     doit(&a);
 
     info!("Using reqwest");
-    let e = Api::new(Engine::Reqw);
+    let e = Ipify::new(Engine::Reqw);
     doit(&e);
 }
