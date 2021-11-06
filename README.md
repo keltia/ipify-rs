@@ -15,10 +15,27 @@ This is my attempt at writing an API & CLI client for the IPIFY API (aka ipify.o
 
 ## API Usage
 
+You first create an instance of `Ipify``with `new()` set the result you want (IPv4, IPv6) and its format (plain text, json).  Result is a string.
 
-## HTTP client
+```rs
+  use ipify::Ipify;
+  
+  let c = Ipify::new().set(Op::IPv4);
+  
+  println!("My IP is {}", c.call());
+```
 
-This API can use either [ureq] or [reqwest] as HTTP client.  You can select the engine with the `with()`method.
+## HTTP engine
+
+This API can use either [ureq] or [reqwest] as HTTP client.  You can select the engine with the `with()` method.  The current version of `Ipify` only support the *blocking* client though.
+
+```rs
+  use ipify::Ipify;
+  
+  let c = Ipify::new().with(Engine::Reqw).set(Op::IPv4);
+  
+  println!("My IP is {}", c.call());
+```
 
 [ureq]: https://docs.rs/crate/ureq/
 [reqwest]: https://docs.rs/crate/reqwest/
@@ -39,3 +56,10 @@ to your `Cargo.toml`:
 ipify-rs = "0.2.0"
 ```
 then you can use it in your own crates.
+
+## Documentation
+
+Full description of the API with examples is on [docs.rs] as usual: [Ipify].
+
+[docs.rs]: https://docs.rs/
+[Ipify]: https://docs.rs/ipify-rs
