@@ -16,6 +16,13 @@ This is my attempt at writing an API & CLI client for the IPIFY API (aka ipify.o
 ## API Usage
 
 
+## HTTP client
+
+This API can use either [ureq] or [reqwest] as HTTP client.  You can select the engine with the `with()`method.
+
+[ureq]: https://docs.rs/crate/ureq/
+[reqwest]: https://docs.rs/crate/reqwest/
+
 ## Example
 
 The file `showall.rs` inside `examples` show almost all parameters for the API. You can run it with:
