@@ -18,8 +18,13 @@ struct Ipify<'a> {
 }
 
 impl<'a> Ipify<'a> {
-    fn new(t: Engine) -> Self {
-        Ipify { t, endp: ENDPOINT6 }
+    fn new() -> Self {
+        Ipify { t: Engine::Ureq, endp: ENDPOINT6 }
+    }
+
+    fn with(mut self, e: Engine) -> Self {
+        self.t = e;
+        self
     }
 
     fn set(mut self, op: Op) -> Self {
@@ -74,10 +79,10 @@ fn main() {
     info!("Start");
 
     info!("Using ureq");
-    let a = Ipify::new(Engine::Ureq);
+    let a = Ipify::new();
     doit(&a);
 
     info!("Using reqwest");
-    let e = Ipify::new(Engine::Reqw);
+    let e = Ipify::new().with(Engine::Reqw);
     doit(&e);
 }
