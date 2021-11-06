@@ -68,6 +68,12 @@ OPTIONS:
   -V, --version    Display version and exit
 ```
 
+You can see both API & CLI versions:
+```
+$ ipify -V
+Running API ipify-rs/0.2.0 CLI ipify/0.1.0
+```
+
 ## crates.io
 
 You can use this package in your project by adding the following
