@@ -18,19 +18,26 @@ This is my attempt at writing an API & CLI client for the IPIFY API (aka ipify.o
 You first create an instance of `Ipify``with `new()` set the result you want (IPv4, IPv6) and its format (plain text, json).  Result is a string.
 
 ```rs
-  use ipify::Ipify;
+  use ipify_rs::{Ipify,Op};
   
   let c = Ipify::new().set(Op::IPv4);
   
   println!("My IP is {}", c.call());
 ```
 
+The four operations are specified as below:
+
+  - OP::IPv4
+  - OP::IPv6   (the default)
+  - OP::IPv4J  (json output)
+  - Op::IPv6J  (json output)
+
 ## HTTP engine
 
 This API can use either [ureq] or [reqwest] as HTTP client.  You can select the engine with the `with()` method.  The current version of `Ipify` only support the *blocking* client though.
 
 ```rs
-  use ipify::Ipify;
+  use ipify_rs::{Engine, Ipify, Op};
   
   let c = Ipify::new().with(Engine::Reqw).set(Op::IPv4);
   
@@ -39,6 +46,18 @@ This API can use either [ureq] or [reqwest] as HTTP client.  You can select the 
 
 [ureq]: https://docs.rs/crate/ureq/
 [reqwest]: https://docs.rs/crate/reqwest/
+
+## Minimalistic API
+
+If you only care about the default (plain text, IPv6 query) and don't want to reuse anything later, then `myip()`  is what you want:
+
+```
+use ipify_rs::myip;
+
+fn main() {
+    println!("{}", myip());
+}
+```
 
 ## CLI utility
 
@@ -75,6 +94,8 @@ The file `showall.rs` inside `examples` show almost all parameters for the API. 
     $ cargo run --example showall
     ...   
     INFO - Start
+    INFO - Using default, minimal API
+    IP=aaaa:bbbb:cccc:dddd:eeee:ffff:gggg:hhhh
     INFO - Using defaults (ureq, ipv6)
     IP=aaaa:bbbb:cccc:dddd:eeee:ffff:gggg:hhhh
     INFO - Using defaults, get json
