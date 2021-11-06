@@ -17,7 +17,10 @@ pub struct Ipify<'a> {
 
 impl<'a> Ipify<'a> {
     pub fn new() -> Self {
-        Ipify { t: Engine::Ureq, endp: ENDPOINT6 }
+        Ipify {
+            t: Engine::Ureq,
+            endp: ENDPOINT6,
+        }
     }
 
     pub fn with(mut self, e: Engine) -> Self {

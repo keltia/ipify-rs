@@ -1,5 +1,5 @@
-use log::info;
 use ipify_rs::{Engine, Ipify, Op};
+use log::info;
 
 fn doit(e: Engine) {
     let a = Ipify::new().with(e);

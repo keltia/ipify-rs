@@ -1,6 +1,6 @@
-use clap::{crate_name, crate_version, crate_authors, AppSettings, Parser};
-use log::info;
+use clap::{crate_authors, crate_name, crate_version, AppSettings, Parser};
 use ipify_rs::{Engine, Ipify, Op};
+use log::info;
 
 /// Binary name
 pub(crate) const NAME: &str = "ipify";
