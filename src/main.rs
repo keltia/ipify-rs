@@ -7,10 +7,6 @@ const ENDPOINT6: &str = "https://api64.ipify.org";
 const ENDPOINT4J: &str = "https://api.ipify.org?format=json";
 const ENDPOINT6J: &str = "https://api64.ipify.org?format=json";
 
-struct Config<T> {
-    agent: Option<T>,
-}
-
 #[derive(Clone, Copy, Debug)]
 enum Engine {
     Ureq,
