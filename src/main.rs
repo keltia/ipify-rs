@@ -1,7 +1,5 @@
 use log::info;
 
-use ureq::AgentBuilder;
-
 const ENDPOINT4: &str = "https://api.ipify.org";
 const ENDPOINT6: &str = "https://api64.ipify.org";
 const ENDPOINT4J: &str = "https://api.ipify.org?format=json";
@@ -37,7 +35,7 @@ impl<'a> Api<'a> {
     fn call(self) -> String {
         match self.t {
             Engine::Ureq => {
-                let c = AgentBuilder::new().user_agent("ipify/1.0.0").build();
+                let c = ureq::AgentBuilder::new().user_agent("ipify/1.0.0").build();
                 return c.get(self.endp).call().unwrap().into_string().unwrap();
             }
             Engine::Reqw => {
