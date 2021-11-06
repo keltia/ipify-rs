@@ -15,7 +15,15 @@ This is my attempt at writing an API & CLI client for the IPIFY API (aka ipify.o
 
 ## API Usage
 
+
+## Example
+
+The file `showall.rs` inside `examples` show almost all parameters for the API. You can run it with:
+
+    $ cargo run --example showall
+
 ## crates.io
+
 You can use this package in your project by adding the following
 to your `Cargo.toml`:
 
