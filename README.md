@@ -40,38 +40,51 @@ This API can use either [ureq] or [reqwest] as HTTP client.  You can select the 
 [ureq]: https://docs.rs/crate/ureq/
 [reqwest]: https://docs.rs/crate/reqwest/
 
-## Example
-
-The file `showall.rs` inside `examples` show almost all parameters for the API. You can run it with:
-
-    $ cargo run --example showall
-
 ## CLI utility
 
 There is a CLI utility bundled with the API called `ipify`. 
 ```
-ipify 0.1.0
-
-Ollivier Robert <roberto@keltia.net>
-
-Rust CLI for IPIFY API.
-
-USAGE:
-  ipify.exe [OPTIONS]
-
-OPTIONS:
-  -4, --ipv4       Force getting IPv4
-  -6, --ipv6       Force getting IPv6
-  -h, --help       Print help information
-  -J, --json       Request JSON output
-  -q, --quiet      Quiet mode
-  -V, --version    Display version and exit
+    ipify 0.1.0
+    
+    Ollivier Robert <roberto@keltia.net>
+    
+    Rust CLI for IPIFY API.
+    
+    USAGE:
+        ipify.exe [OPTIONS]
+    
+    OPTIONS:
+        -4, --ipv4       Force getting IPv4
+        -6, --ipv6       Force getting IPv6
+        -h, --help       Print help information
+        -J, --json       Request JSON output
+        -q, --quiet      Quiet mode
+        -V, --version    Display version and exit
 ```
 
 You can see both API & CLI versions:
 ```
-$ ipify -V
-Running API ipify-rs/0.2.0 CLI ipify/0.1.0
+    $ ipify -V
+    Running API ipify-rs/0.2.0 CLI ipify/0.1.0
+```
+
+## Example
+
+The file `showall.rs` inside `examples` show almost all parameters for the API. You can run it with:
+```
+    $ cargo run --example showall
+    ...   
+    INFO - Start
+    INFO - Using defaults (ureq, ipv6)
+    IP=aaaa:bbbb:cccc:dddd:eeee:ffff:gggg:hhhh
+    INFO - Using defaults, get json
+    IP={"ip":"aaaa:bbbb:cccc:dddd:eeee:ffff:gggg:hhhh"}
+    INFO - Using ureq
+    IP4="A.B.C.D"
+    IP6="aaaa:bbbb:cccc:dddd:eeee:ffff:gggg:hhhh"
+    INFO - Using reqwest
+    IP4="A.B.C.D"
+    IP6="aaaa:bbbb:cccc:dddd:eeee:ffff:gggg:hhhh"
 ```
 
 ## crates.io
