@@ -1,6 +1,6 @@
 //! Ipify
 //!
-//! My implementation of the ipify.org API to get your own public IP address
+//! My implementation of the ipify-cli.org API to get your own public IP address
 //!
 //! The fastest way to use it is to use the `myip()` wrapper:
 //!
@@ -133,12 +133,12 @@ impl<'a> Ipify<'a> {
     pub fn call(self) -> String {
         match self.t {
             Engine::Ureq => {
-                let c = ureq::AgentBuilder::new().user_agent("ipify/1.0.0").build();
+                let c = ureq::AgentBuilder::new().user_agent("ipify-cli/1.0.0").build();
                 return c.get(self.endp).call().unwrap().into_string().unwrap();
             }
             Engine::Reqw => {
                 let c = reqwest::blocking::ClientBuilder::new()
-                    .user_agent("ipify/1.0.0")
+                    .user_agent("ipify-cli/1.0.0")
                     .build()
                     .unwrap();
                 return c.get(self.endp).send().unwrap().text().unwrap();

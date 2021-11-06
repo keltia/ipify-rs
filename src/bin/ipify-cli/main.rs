@@ -1,9 +1,8 @@
 use clap::{crate_authors, crate_name, crate_version, AppSettings, Parser};
-use ipify_rs::{Engine, Ipify, Op};
 use log::info;
 
 /// Binary name
-pub(crate) const NAME: &str = "ipify";
+pub(crate) const NAME: &str = "ipify-cli";
 /// Binary version, different from the API itself represented the crate.
 pub(crate) const VERSION: &str = "0.1.0";
 
@@ -30,17 +29,24 @@ struct Opts {
     json: bool,
 }
 
+fn banner() -> String {
+    let n = crate_name!();
+    let v = crate_version!();
+
+    format!("CLI {}/{} using API {}/{}\n", NAME, VERSION, n, v)
+}
+/// Start
 fn main() {
     let opts: Opts = Opts::parse();
 
+    let v = !opts.quiet;
+
     // Do not forget to set NoAutoVersion otherwise this is ignored
     if opts.version {
-        let n = crate_name!();
-        let v = crate_version!();
-
-        println!("Running API {}/{} CLI {}/{}\n", n, v, NAME, VERSION);
+        println!("{}", banner());
         std::process::exit(0);
     }
 
-    info!("Start");
+    if v { banner() }
+
 }
