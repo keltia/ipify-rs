@@ -36,7 +36,7 @@ pub fn myip() -> String {
 }
 
 /// Describe the available HTTP engines
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub enum Engine {
     // ureq
     Ureq,
@@ -45,7 +45,7 @@ pub enum Engine {
 }
 
 /// The current set of operations
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub enum Op {
     /// Plain text
     IPv4,
@@ -61,7 +61,9 @@ pub enum Op {
 #[derive(Clone, Copy, Debug)]
 pub struct Ipify<'a> {
     /// HTTP Engine
-    pub t: Engine,
+    pub e: Engine,
+    /// Current type of operation
+    pub t: Op,
     /// Endpoint, different for every operation
     pub endp: &'a str,
 }
@@ -75,7 +77,7 @@ impl<'a> Ipify<'a> {
     /// use ipify_rs::*;
     ///
     /// fn main() {
-    ///   let a = Ipify::new();
+    ///   let mut a = Ipify::new();
     ///
     ///   println!("{}", a.call());
     /// }
@@ -83,7 +85,8 @@ impl<'a> Ipify<'a> {
     ///
     pub fn new() -> Self {
         Ipify {
-            t: Engine::Ureq,
+            e: Engine::Ureq,
+            t: Op::IPv6,
             endp: ENDPOINT6,
         }
     }
@@ -95,14 +98,15 @@ impl<'a> Ipify<'a> {
     /// use ipify_rs::{Ipify, Engine};
     ///
     /// fn main() {
-    ///   let a = Ipify::new().with(Engine::Reqw);
+    ///   let mut a = Ipify::new();
+    ///   a.with(Engine::Reqw);
     ///
     ///   println!("{}", a.call());
     /// }
     /// ```
     ///
     pub fn with(mut self, e: Engine) -> Self {
-        self.t = e;
+        self.e = e;
         self
     }
 
@@ -113,7 +117,8 @@ impl<'a> Ipify<'a> {
     /// use ipify_rs::{Ipify, Op};
     ///
     /// fn main() {
-    ///   let a = Ipify::new().set(Op::IPv6J);
+    ///   let mut a = Ipify::new();
+    ///   a.set(Op::IPv6J);
     ///
     ///   println!("{}", a.call());
     /// }
@@ -126,15 +131,16 @@ impl<'a> Ipify<'a> {
             Op::IPv4J => ENDPOINT4J,
             Op::IPv6J => ENDPOINT6J,
         };
+        self.t = op;
         self
     }
 
     /// Actually perform the API call
     pub fn call(self) -> String {
-        match self.t {
+        match self.e {
             Engine::Ureq => {
                 let c = ureq::AgentBuilder::new().user_agent("ipify-cli/1.0.0").build();
-                return c.get(self.endp).call().unwrap().into_string().unwrap();
+                return c.get(&self.endp).call().unwrap().into_string().unwrap();
             }
             Engine::Reqw => {
                 let c = reqwest::blocking::ClientBuilder::new()
@@ -143,7 +149,53 @@ impl<'a> Ipify<'a> {
                     .unwrap();
                 return c.get(self.endp).send().unwrap().text().unwrap();
             }
-        };
+        }
     }
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_set_1() {
+        let c = Ipify::new();
+
+        assert_eq!(Op::IPv6, c.t);
+        let c = c.set(Op::IPv4J);
+        assert_eq!(Op::IPv4J, c.t);
+        let c = c.set(Op::IPv6);
+        assert_eq!(Op::IPv6, c.t);
+    }
+
+    #[test]
+    fn test_set_2() {
+        let c = Ipify::new().set(Op::IPv4J).set(Op::IPv6J);
+        assert_eq!(Op::IPv6J, c.t);
+    }
+
+    #[test]
+    fn test_with_1() {
+        let c = Ipify::new();
+
+        assert_eq!(Op::IPv6, c.t);
+        let c = c.with(Engine::Reqw);
+        assert_eq!(Engine::Reqw, c.e);
+        let c = c.with(Engine::Ureq);
+        assert_eq!(Engine::Ureq, c.e);
+    }
+
+    #[test]
+    fn test_with_set() {
+        let c = Ipify::new();
+
+        assert_eq!(Op::IPv6, c.t);
+        let c = c.with(Engine::Reqw).set(Op::IPv4);
+        assert_eq!(Engine::Reqw, c.e);
+        assert_eq!(Op::IPv4, c.t);
+
+        let c = c.set(Op::IPv4J).with(Engine::Ureq);
+        assert_eq!(Engine::Ureq, c.e);
+        assert_eq!(Op::IPv4J, c.t);
+    }
+}
