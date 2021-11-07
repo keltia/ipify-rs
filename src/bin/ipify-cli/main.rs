@@ -1,10 +1,10 @@
 use clap::{crate_authors, crate_name, crate_version, AppSettings, Parser};
-use log::info;
+use ipify_rs::{Ipify, Op};
 
 /// Binary name
 pub(crate) const NAME: &str = "ipify-cli";
 /// Binary version, different from the API itself represented the crate.
-pub(crate) const VERSION: &str = "0.1.0";
+pub(crate) const VERSION: &str = "0.2.0";
 
 /// Help message
 #[derive(Debug, Parser)]
@@ -35,6 +35,7 @@ fn banner() -> String {
 
     format!("CLI {}/{} using API {}/{}\n", NAME, VERSION, n, v)
 }
+
 /// Start
 fn main() {
     let opts: Opts = Opts::parse();
@@ -47,6 +48,30 @@ fn main() {
         std::process::exit(0);
     }
 
-    if v { banner() }
+    if v { println!("{}", banner()) }
 
+    // Start with defaults
+    let mut op = Op::IPv6;
+
+    if opts.ipv4 {
+        op = Op::IPv4;
+    }
+
+    if opts.ipv6 {
+        op = Op::IPv6;
+    }
+
+    if opts.json {
+        op = match op {
+            Op::IPv4|Op::IPv4J => Op::IPv4J,
+            Op::IPv6|Op::IPv6J => Op::IPv6J,
+        };
+    }
+    let c= Ipify::new();
+    let r = c.set(op).call();
+    if v {
+        println!("My IP = {}", r);
+    } else {
+        println!("{}", r);
+    }
 }
