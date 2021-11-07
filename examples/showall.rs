@@ -2,13 +2,11 @@ use ipify_rs::*;
 use log::info;
 
 fn doit(e: Engine) {
-    let a = Ipify::new().with(e);
+    let ip = Ipify::new();
+    ip.with(e);
 
-    let ip4 = a.set(Op::IPv4).call();
-    let ip6 = a.set(Op::IPv6).call();
-
-    println!("IP4={:?}", ip4);
-    println!("IP6={:?}", ip6);
+    println!("IP4={:?}", ip.set(Op::IPv4).call());
+    println!("IP6={:?}", ip.set(Op::IPv6).call());
 }
 
 fn main() {
