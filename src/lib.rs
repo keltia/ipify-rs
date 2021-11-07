@@ -143,7 +143,9 @@ impl<'a> Ipify<'a> {
     pub fn call(self) -> String {
         match self.e {
             Engine::Ureq => {
-                let c = ureq::AgentBuilder::new().user_agent("ipify-cli/1.0.0").build();
+                let c = ureq::AgentBuilder::new()
+                    .user_agent("ipify-cli/1.0.0")
+                    .build();
                 return c.get(&self.endp).call().unwrap().into_string().unwrap();
             }
             Engine::Reqw => {

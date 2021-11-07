@@ -48,7 +48,9 @@ fn main() {
         std::process::exit(0);
     }
 
-    if v { println!("{}", banner()) }
+    if v {
+        println!("{}", banner())
+    }
 
     // Start with defaults
     let mut op = Op::IPv6;
@@ -63,11 +65,11 @@ fn main() {
 
     if opts.json {
         op = match op {
-            Op::IPv4|Op::IPv4J => Op::IPv4J,
-            Op::IPv6|Op::IPv6J => Op::IPv6J,
+            Op::IPv4 | Op::IPv4J => Op::IPv4J,
+            Op::IPv6 | Op::IPv6J => Op::IPv6J,
         };
     }
-    let c= Ipify::new();
+    let c = Ipify::new();
     let r = c.set(op).call();
     if v {
         println!("My IP = {}", r);
