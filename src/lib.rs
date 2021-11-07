@@ -15,9 +15,13 @@
 //!
 //! The full API is described below.
 
+/// IPv4 endpoint, plain text
 const ENDPOINT4: &str = "https://api.ipify.org";
+/// IPv6 endpoint, plain text
 const ENDPOINT6: &str = "https://api64.ipify.org";
+/// IPv4 endpoint, JSON
 const ENDPOINT4J: &str = "https://api.ipify.org?format=json";
+/// IPv6 endpoint, JSON
 const ENDPOINT6J: &str = "https://api64.ipify.org?format=json";
 
 /// Minimalistic API
