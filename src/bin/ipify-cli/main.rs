@@ -1,5 +1,5 @@
 use clap::{crate_authors, crate_name, crate_version, AppSettings, Parser};
-use ipify_rs::{Ipify, Op};
+use ipify_rs::{Engine, Ipify, Op};
 
 /// Binary name
 pub(crate) const NAME: &str = "ipify-cli";
@@ -27,6 +27,9 @@ struct Opts {
     /// Request JSON output
     #[clap(short = 'J', long = "json")]
     json: bool,
+    /// Request other engine
+    #[clap(short = 'E', long = "engine", default_value = "ureq")]
+    engine: String,
 }
 
 fn banner() -> String {
@@ -54,6 +57,7 @@ fn main() {
 
     // Start with defaults
     let mut op = Op::IPv6;
+    let mut e = Engine::Ureq;
 
     if opts.ipv4 {
         op = Op::IPv4;
@@ -69,8 +73,13 @@ fn main() {
             Op::IPv6 | Op::IPv6J => Op::IPv6J,
         };
     }
+
+    if opts.engine == "reqw" {
+        e = Engine::Reqw;
+    }
+
     let c = Ipify::new();
-    let r = c.set(op).call();
+    let r = c.set(op).with(e).call();
     if v {
         println!("My IP = {}", r);
     } else {
