@@ -8,9 +8,7 @@
 //! ```
 //! use ipify_rs::myip;
 //!
-//! fn main() {
-//!   println!("My IP is: {}", myip());
-//! }
+//! println!("My IP is: {}", myip());
 //! ```
 //!
 //! The full API is described below.
@@ -30,9 +28,7 @@ const ENDPOINT6J: &str = "https://api64.ipify.org?format=json";
 /// ```
 /// use ipify_rs::myip;
 ///
-/// fn main() {
-///     println!("{}", myip())
-/// }
+/// println!("{}", myip())
 /// ```
 ///
 pub fn myip() -> String {
@@ -76,15 +72,13 @@ pub struct Ipify<'a> {
 impl<'a> Ipify<'a> {
     /// Create a new API instance client with the defaults
     ///
-    /// Examples:
+    /// Example:
     /// ```
     /// use ipify_rs::*;
     ///
-    /// fn main() {
-    ///   let mut a = Ipify::new();
+    /// let mut a = Ipify::new();
     ///
-    ///   println!("{}", a.call());
-    /// }
+    /// println!("{}", a.call());
     /// ```
     ///
     pub fn new() -> Self {
@@ -120,12 +114,10 @@ impl<'a> Ipify<'a> {
     /// ```
     /// use ipify_rs::{Ipify, Op};
     ///
-    /// fn main() {
-    ///   let mut a = Ipify::new();
-    ///   a.set(Op::IPv6J);
+    /// let mut a = Ipify::new();
+    /// a.set(Op::IPv6J);
     ///
-    ///   println!("{}", a.call());
-    /// }
+    /// println!("{}", a.call());
     /// ```
     ///
     pub fn set(mut self, op: Op) -> Self {
@@ -140,6 +132,16 @@ impl<'a> Ipify<'a> {
     }
 
     /// Actually perform the API call
+    ///
+    /// Example:
+    /// ```
+    /// use ipify_rs::Ipify;
+    ///
+    /// let r = Ipify::new().call();
+    ///
+    /// println!("my ip = {}", r);
+    /// ```
+    ///
     pub fn call(self) -> String {
         match self.e {
             Engine::Ureq => {
