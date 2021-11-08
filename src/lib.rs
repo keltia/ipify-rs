@@ -35,15 +35,6 @@ pub fn myip() -> String {
     Ipify::new().call()
 }
 
-/// Describe the available HTTP engines
-#[derive(Clone, Copy, Debug, PartialEq)]
-pub enum Engine {
-    // ureq
-    Ureq,
-    // reqwest
-    Reqw,
-}
-
 /// The current set of operations
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum Op {
@@ -60,8 +51,6 @@ pub enum Op {
 /// The main API struct
 #[derive(Clone, Copy, Debug)]
 pub struct Ipify<'a> {
-    /// HTTP Engine
-    pub e: Engine,
     /// Current type of operation
     pub t: Op,
     /// Endpoint, different for every operation
@@ -90,29 +79,9 @@ impl<'a> Ipify<'a> {
     ///
     pub fn new() -> Self {
         Ipify {
-            e: Engine::Ureq,
             t: Op::IPv6,
             endp: ENDPOINT6,
         }
-    }
-
-    /// Use the specified HTTP engine
-    ///
-    /// Examples:
-    /// ```
-    /// use ipify_rs::{Ipify, Engine};
-    ///
-    /// fn main() {
-    ///   let mut a = Ipify::new();
-    ///   a.with(Engine::Reqw);
-    ///
-    ///   println!("{}", a.call());
-    /// }
-    /// ```
-    ///
-    pub fn with(mut self, e: Engine) -> Self {
-        self.e = e;
-        self
     }
 
     /// Specify the subsequent operation to perform on `call()`
@@ -150,24 +119,11 @@ impl<'a> Ipify<'a> {
     /// ```
     ///
     pub fn call(self) -> String {
-        match self.e {
-            Engine::Ureq => {
-                let pe = env!("http_proxy");
-                let p = ureq::Proxy::new(pe).unwrap();
-                let c = ureq::AgentBuilder::new()
-                    .user_agent("ipify-cli/1.0.0")
-                    .proxy(p)
-                    .build();
-                return c.get(&self.endp).call().unwrap().into_string().unwrap();
-            }
-            Engine::Reqw => {
-                let c = reqwest::blocking::ClientBuilder::new()
-                    .user_agent("ipify-cli/1.0.0")
-                    .build()
-                    .unwrap();
-                return c.get(self.endp).send().unwrap().text().unwrap();
-            }
-        }
+        let c = reqwest::blocking::ClientBuilder::new()
+            .user_agent("ipify-cli/1.0.0")
+            .build()
+            .unwrap();
+        c.get(self.endp).send().unwrap().text().unwrap()
     }
 }
 
@@ -197,10 +153,6 @@ mod tests {
         let c = Ipify::new();
 
         assert_eq!(Op::IPv6, c.t);
-        let c = c.with(Engine::Reqw);
-        assert_eq!(Engine::Reqw, c.e);
-        let c = c.with(Engine::Ureq);
-        assert_eq!(Engine::Ureq, c.e);
     }
 
     #[test]
@@ -208,12 +160,10 @@ mod tests {
         let c = Ipify::new();
 
         assert_eq!(Op::IPv6, c.t);
-        let c = c.with(Engine::Reqw).set(Op::IPv4);
-        assert_eq!(Engine::Reqw, c.e);
+        let c = c.set(Op::IPv4);
         assert_eq!(Op::IPv4, c.t);
 
-        let c = c.set(Op::IPv4J).with(Engine::Ureq);
-        assert_eq!(Engine::Ureq, c.e);
+        let c = c.set(Op::IPv4J);
         assert_eq!(Op::IPv4J, c.t);
     }
 }

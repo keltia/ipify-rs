@@ -15,6 +15,5 @@ documentation = "https://docs.rs/ipify-rs"
 [dependencies]
 clap = "3.0.0-beta.5"
 log = "0.4"
-ureq = { version = "2", features = ["socks-proxy"] }
 reqwest = { version = "0.11.6", features = ["blocking"] }
 stderrlog = "0.5.1"
