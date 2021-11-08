@@ -32,21 +32,6 @@ The four operations are specified as below:
   - `OP::IPv4J`  (json output)
   - `Op::IPv6J`  (json output)
 
-## HTTP engine
-
-This API can use either [ureq] or [reqwest] as HTTP client.  You can select the engine with the `with()` method.  The current version of `Ipify` only support the *blocking* client though.
-
-```rs
-  use ipify_rs::{Engine, Ipify, Op};
-  
-  let c = Ipify::new().with(Engine::Reqw).set(Op::IPv4);
-  
-  println!("My IP is {}", c.call());
-```
-
-[ureq]: https://docs.rs/crate/ureq/
-[reqwest]: https://docs.rs/crate/reqwest/
-
 ## Minimalistic API
 
 If you only care about the default (plain text, IPv6 query) and don't want to reuse anything later, then `myip()`  is what you want:
@@ -63,7 +48,7 @@ fn main() {
 
 There is a CLI utility bundled with the API called `ipify-cli`. 
 ```
-    ipify-cli 0.2.0
+    ipify-cli 0.4.0
     
     Ollivier Robert <roberto@keltia.net>
     
@@ -84,7 +69,8 @@ There is a CLI utility bundled with the API called `ipify-cli`.
 You can see both API & CLI versions:
 ```
     $ ipify-cli -V
-    Running API ipify-rs/0.2.0 CLI ipify-cli/0.1.0
+CLI ipify-cli/0.4.0 using API ipify-rs/0.5.0
+
 ```
 
 ## Example
@@ -96,14 +82,10 @@ The file `showall.rs` inside `examples` show almost all parameters for the API. 
     INFO - Start
     INFO - Using default, minimal API
     IP=aaaa:bbbb:cccc:dddd:eeee:ffff:gggg:hhhh
-    INFO - Using defaults (ureq, ipv6)
+    INFO - Using defaults (ipv6)
     IP=aaaa:bbbb:cccc:dddd:eeee:ffff:gggg:hhhh
     INFO - Using defaults, get json
     IP={"ip":"aaaa:bbbb:cccc:dddd:eeee:ffff:gggg:hhhh"}
-    INFO - Using ureq
-    IP4="A.B.C.D"
-    IP6="aaaa:bbbb:cccc:dddd:eeee:ffff:gggg:hhhh"
-    INFO - Using reqwest
     IP4="A.B.C.D"
     IP6="aaaa:bbbb:cccc:dddd:eeee:ffff:gggg:hhhh"
 ```
@@ -115,7 +97,7 @@ to your `Cargo.toml`:
 
 ``` toml
 [dependencies]
-ipify-rs = "0.2.0"
+ipify-rs = "0.5.0"
 ```
 then you can use it in your own crates.
 
