@@ -48,7 +48,7 @@ fn main() {
 
 There is a CLI utility bundled with the API called `ipify-cli`. 
 ```
-    ipify-cli 0.2.0
+    ipify-cli 0.4.0
     
     Ollivier Robert <roberto@keltia.net>
     
@@ -69,7 +69,7 @@ There is a CLI utility bundled with the API called `ipify-cli`.
 You can see both API & CLI versions:
 ```
     $ ipify-cli -V
-CLI ipify-cli/0.1.0 using API ipify-rs/0.2.0
+CLI ipify-cli/0.4.0 using API ipify-rs/0.5.0
 
 ```
 
@@ -97,7 +97,7 @@ to your `Cargo.toml`:
 
 ``` toml
 [dependencies]
-ipify-rs = "0.2.0"
+ipify-rs = "0.5.0"
 ```
 then you can use it in your own crates.
 
