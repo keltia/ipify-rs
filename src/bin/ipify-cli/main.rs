@@ -4,7 +4,7 @@ use ipify_rs::{Engine, Ipify, Op};
 /// Binary name
 pub(crate) const NAME: &str = "ipify-cli";
 /// Binary version, different from the API itself represented the crate.
-pub(crate) const VERSION: &str = "0.2.0";
+pub(crate) const VERSION: &str = "0.3.0";
 
 /// Help message
 #[derive(Debug, Parser)]
