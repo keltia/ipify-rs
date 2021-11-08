@@ -15,22 +15,22 @@ This is my attempt at writing an API & CLI client for the IPIFY API (aka ipify.o
 
 ## API Usage
 
-You first create an instance of `Ipify``with `new()` set the result you want (IPv4, IPv6) and its format (plain text, json).  Result is a string.
+You first create an instance of `Ipify` with `new()` set the result you want (IPv4, IPv6) and its format (plain text, json).  Result is a string.
 
 ```rs
   use ipify_rs::{Ipify,Op};
   
-  let c = Ipify::new().set(Op::IPv4);
+  let ip = Ipify::new().set(Op::IPv4).call();
   
-  println!("My IP is {}", c.call());
+  println!("My IP is {}", ip);
 ```
 
 The four operations are specified as below:
 
-  - OP::IPv4
-  - OP::IPv6   (the default)
-  - OP::IPv4J  (json output)
-  - Op::IPv6J  (json output)
+  - `OP::IPv4`
+  - `OP::IPv6`   (the default)
+  - `OP::IPv4J`  (json output)
+  - `Op::IPv6J`  (json output)
 
 ## HTTP engine
 
@@ -61,16 +61,16 @@ fn main() {
 
 ## CLI utility
 
-There is a CLI utility bundled with the API called `ipify`. 
+There is a CLI utility bundled with the API called `ipify-cli`. 
 ```
-    ipify 0.1.0
+    ipify-cli 0.2.0
     
     Ollivier Robert <roberto@keltia.net>
     
     Rust CLI for IPIFY API.
     
     USAGE:
-        ipify.exe [OPTIONS]
+        ipify-cli.exe [OPTIONS]
     
     OPTIONS:
         -4, --ipv4       Force getting IPv4
@@ -83,8 +83,8 @@ There is a CLI utility bundled with the API called `ipify`.
 
 You can see both API & CLI versions:
 ```
-    $ ipify -V
-    Running API ipify-rs/0.2.0 CLI ipify/0.1.0
+    $ ipify-cli -V
+    Running API ipify-rs/0.2.0 CLI ipify-cli/0.1.0
 ```
 
 ## Example
