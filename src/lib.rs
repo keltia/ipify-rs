@@ -68,6 +68,13 @@ pub struct Ipify<'a> {
     pub endp: &'a str,
 }
 
+/// Impl. default values.
+impl<'a> Default for Ipify<'a> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 /// API Implementation
 impl<'a> Ipify<'a> {
     /// Create a new API instance client with the defaults
