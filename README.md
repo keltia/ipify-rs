@@ -1,9 +1,27 @@
+<!-- omit in TOC -->
 # ipify-rs
 
+> **Rust API & CLI for accessing the ipify.org HTTP API**
+
 [![CircleCI](https://circleci.com/gh/keltia/ipify-rs/tree/main.svg?style=shield)](https://circleci.com/gh/keltia/ipify-rs/tree/main)
-[![dependency status](https://deps.rs/repo/github/keltia/ipify-rs/status.svg)](https://deps.rs/repo/github/keltia/ipify-rs)
-[![](https://img.shields.io/crates/v/ipify-rs.svg)](https://crates.io/crates/ipify-rs)
+[![Crates.io](https://img.shields.io/crates/v/ipify-rs.svg)](https://crates.io/crates/ipify-rs)
 [![Docs](https://docs.rs/ipify-rs/badge.svg)](https://docs.rs/ipify-rs)
+[![GitHub release](https://img.shields.io/github/release/keltia/ipify-rs.svg)](https://github.com/keltia/ipify-rs/releases/)
+[![GitHub issues](https://img.shields.io/github/issues/keltia/ipify-rs.svg)](https://github.com/keltia/ipify-rs/issues)
+[![SemVer](https://img.shields.io/badge/semver-2.0.0-blue)](https://semver.org/spec/v2.0.0.html)
+[![License](https://img.shields.io/crates/l/mit)](https://opensource.org/licenses/MIT)
+[![dependency status](https://deps.rs/repo/github/keltia/ipify-rs/status.svg)](https://deps.rs/repo/github/keltia/ipify-rs)
+
+Licensed under the [MIT](LICENSE).
+
+1. [About](#about)
+2. [API Usage](#api-usage)
+3. [Installation](#installation)
+4. [Example](#example)
+5. [Documentation](#documentation)
+6. [Contributing](#contributing)
+
+## About
 
 This is my attempt at writing an API & CLI client for the IPIFY API (aka ipify.org).  After looking at all the other crates, they are all flawed in some way (only IPv4, not really cargo compliant, etc.).
 
@@ -32,7 +50,7 @@ The four operations are specified as below:
   - `OP::IPv4J`  (json output)
   - `Op::IPv6J`  (json output)
 
-## Minimalistic API
+### Minimalistic API
 
 If you only care about the default (plain text, IPv6 query) and don't want to reuse anything later, then `myip()`  is what you want:
 
@@ -44,7 +62,7 @@ fn main() {
 }
 ```
 
-## CLI utility
+### CLI utility
 
 There is a CLI utility bundled with the API called `ipify-cli`. 
 ```
@@ -107,3 +125,16 @@ Full description of the API with examples is on [docs.rs] as usual: [Ipify].
 
 [docs.rs]: https://docs.rs/
 [Ipify]: https://docs.rs/ipify-rs
+
+## Contributing
+
+Please see [CONTRIBUTING.md](CONTRIBUTING.md) for some simple rules.
+
+I use Git Flow for this package so please use something similar or the usual github workflow.
+
+1. Fork it ( https://github.com/keltia/dmarc-rs/fork )
+2. Checkout the develop branch (`git checkout develop`)
+3. Create your feature branch (`git checkout -b my-new-feature`)
+4. Commit your changes (`git commit -am 'Add some feature'`)
+5. Push to the branch (`git push origin my-new-feature`)
+6. Create a new Pull Request
