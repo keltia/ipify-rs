@@ -9,6 +9,14 @@ license = "MIT"
 readme = "README.md"
 description = "Rust crate for the ipify.org API."
 documentation = "https://docs.rs/ipify-rs"
+categories = [ "api-bindings", "command-line-utilities" ]
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
+[badges]
+maintenance = { status = "actively-developed" }
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
