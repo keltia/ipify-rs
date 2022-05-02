@@ -130,6 +130,7 @@ impl<'a> Ipify<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::net::IpAddr;
 
     #[test]
     fn test_set_1() {
@@ -165,5 +166,11 @@ mod tests {
 
         let c = c.set(Op::IPv4J);
         assert_eq!(Op::IPv4J, c.t);
+    }
+
+    #[test]
+    fn test_myip() {
+        let str = myip().parse::<IpAddr>();
+        assert!(str.is_ok());
     }
 }
