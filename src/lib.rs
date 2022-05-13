@@ -99,15 +99,16 @@ impl Ipify {
     /// println!("{}", a.call());
     /// ```
     ///
-    pub fn set(mut self, op: Op) -> Self {
-        self.endp = match op {
-            Op::IPv4 => ENDPOINT4,
-            Op::IPv6 => ENDPOINT6,
-            Op::IPv4J => ENDPOINT4J,
-            Op::IPv6J => ENDPOINT6J,
-        };
-        self.t = op;
-        self
+    pub fn set(&self, op: Op) -> Self {
+        Self {
+            t: op,
+            endp: match op {
+                Op::IPv4 => ENDPOINT4.to_owned(),
+                Op::IPv6 => ENDPOINT6.to_owned(),
+                Op::IPv4J => ENDPOINT4J.to_owned(),
+                Op::IPv6J => ENDPOINT6J.to_owned(),
+            },
+        }
     }
 
     /// Actually perform the API call
