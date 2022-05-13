@@ -1,6 +1,6 @@
 [package]
 name = "ipify-rs"
-version = "0.5.2"
+version = "0.6.0"
 edition = "2021"
 authors = ["Ollivier Robert <roberto@keltia.net>"]
 keywords = ["ipify", "api", "client"]
@@ -28,3 +28,4 @@ stderrlog = "0.5"
 
 [dev-dependencies]
 assert_cmd = "2.0"
+httpmock = "0.6"

@@ -13,6 +13,8 @@
 //!
 //! The full API is described below.
 
+use clap::{crate_name, crate_version};
+
 /// IPv4 endpoint, plain text
 const ENDPOINT4: &str = "https://api.ipify.org";
 /// IPv6 endpoint, plain text
@@ -31,6 +33,7 @@ const ENDPOINT6J: &str = "https://api64.ipify.org?format=json";
 /// println!("{}", myip())
 /// ```
 ///
+#[inline]
 pub fn myip() -> String {
     Ipify::new().call()
 }
@@ -49,38 +52,38 @@ pub enum Op {
 }
 
 /// The main API struct
-#[derive(Clone, Copy, Debug)]
-pub struct Ipify<'a> {
+#[derive(Clone, Debug)]
+pub struct Ipify {
     /// Current type of operation
     pub t: Op,
     /// Endpoint, different for every operation
-    pub endp: &'a str,
+    pub endp: String,
 }
 
 /// Impl. default values.
-impl<'a> Default for Ipify<'a> {
+impl Default for Ipify {
     fn default() -> Self {
         Self::new()
     }
 }
 
 /// API Implementation
-impl<'a> Ipify<'a> {
+impl Ipify {
     /// Create a new API instance client with the defaults
     ///
     /// Example:
     /// ```
     /// use ipify_rs::*;
     ///
-    /// let mut a = Ipify::new();
+    /// let a = Ipify::new();
     ///
     /// println!("{}", a.call());
     /// ```
     ///
     pub fn new() -> Self {
-        Ipify {
+        Self {
             t: Op::IPv6,
-            endp: ENDPOINT6,
+            endp: ENDPOINT6.to_owned(),
         }
     }
 
@@ -96,15 +99,16 @@ impl<'a> Ipify<'a> {
     /// println!("{}", a.call());
     /// ```
     ///
-    pub fn set(mut self, op: Op) -> Self {
-        self.endp = match op {
-            Op::IPv4 => ENDPOINT4,
-            Op::IPv6 => ENDPOINT6,
-            Op::IPv4J => ENDPOINT4J,
-            Op::IPv6J => ENDPOINT6J,
-        };
-        self.t = op;
-        self
+    pub fn set(&self, op: Op) -> Self {
+        Self {
+            t: op,
+            endp: match op {
+                Op::IPv4 => ENDPOINT4.to_owned(),
+                Op::IPv6 => ENDPOINT6.to_owned(),
+                Op::IPv4J => ENDPOINT4J.to_owned(),
+                Op::IPv6J => ENDPOINT6J.to_owned(),
+            },
+        }
     }
 
     /// Actually perform the API call
@@ -120,7 +124,7 @@ impl<'a> Ipify<'a> {
     ///
     pub fn call(self) -> String {
         let c = reqwest::blocking::ClientBuilder::new()
-            .user_agent("ipify-cli/1.0.0")
+            .user_agent(format!("{}/{}", crate_name!(), crate_version!()))
             .build()
             .unwrap();
         c.get(self.endp).send().unwrap().text().unwrap()
@@ -130,6 +134,8 @@ impl<'a> Ipify<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::net::IpAddr;
+    use httpmock::prelude::*;
 
     #[test]
     fn test_set_1() {
@@ -144,7 +150,9 @@ mod tests {
 
     #[test]
     fn test_set_2() {
-        let c = Ipify::new().set(Op::IPv4J).set(Op::IPv6J);
+        let c = Ipify::new();
+
+        let c = c.set(Op::IPv4J).set(Op::IPv6J);
         assert_eq!(Op::IPv6J, c.t);
     }
 
@@ -165,5 +173,27 @@ mod tests {
 
         let c = c.set(Op::IPv4J);
         assert_eq!(Op::IPv4J, c.t);
+    }
+
+    #[test]
+    fn test_myip() {
+        let server = MockServer::start();
+
+        let m = server.mock(|when, then| {
+            when.method(GET)
+                            .header("user-agent", format!("{}/{}", crate_name!(), crate_version!()));
+            then.status(200)
+                .body("192.0.2.1");
+        });
+
+        let mut c = Ipify::new();
+        let b = server.base_url().clone();
+        c.endp = b.to_owned();
+        let str = c.call();
+
+        let ip = str.parse::<IpAddr>();
+        m.assert();
+        assert!(ip.is_ok());
+        assert_eq!("192.0.2.1", str);
     }
 }
