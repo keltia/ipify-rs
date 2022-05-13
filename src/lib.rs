@@ -135,6 +135,7 @@ impl Ipify {
 mod tests {
     use super::*;
     use std::net::IpAddr;
+    use httpmock::prelude::*;
 
     #[test]
     fn test_set_1() {
@@ -176,7 +177,23 @@ mod tests {
 
     #[test]
     fn test_myip() {
-        let str = myip().parse::<IpAddr>();
-        assert!(str.is_ok());
+        let server = MockServer::start();
+
+        let m = server.mock(|when, then| {
+            when.method(GET)
+                            .header("user-agent", format!("{}/{}", crate_name!(), crate_version!()));
+            then.status(200)
+                .body("192.0.2.1");
+        });
+
+        let mut c = Ipify::new();
+        let b = server.base_url().clone();
+        c.endp = b.to_owned();
+        let str = c.call();
+
+        let ip = str.parse::<IpAddr>();
+        m.assert();
+        assert!(ip.is_ok());
+        assert_eq!("192.0.2.1", str);
     }
 }
