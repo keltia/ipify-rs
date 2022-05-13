@@ -31,6 +31,7 @@ const ENDPOINT6J: &str = "https://api64.ipify.org?format=json";
 /// println!("{}", myip())
 /// ```
 ///
+#[inline]
 pub fn myip() -> String {
     Ipify::new().call()
 }
