@@ -49,23 +49,23 @@ pub enum Op {
 }
 
 /// The main API struct
-#[derive(Clone, Copy, Debug)]
-pub struct Ipify<'a> {
+#[derive(Clone, Debug)]
+pub struct Ipify {
     /// Current type of operation
     pub t: Op,
     /// Endpoint, different for every operation
-    pub endp: &'a str,
+    pub endp: String,
 }
 
 /// Impl. default values.
-impl<'a> Default for Ipify<'a> {
+impl Default for Ipify {
     fn default() -> Self {
         Self::new()
     }
 }
 
 /// API Implementation
-impl<'a> Ipify<'a> {
+impl Ipify {
     /// Create a new API instance client with the defaults
     ///
     /// Example:
@@ -80,7 +80,7 @@ impl<'a> Ipify<'a> {
     pub fn new() -> Self {
         Ipify {
             t: Op::IPv6,
-            endp: ENDPOINT6,
+            endp: ENDPOINT6.to_owned(),
         }
     }
 
