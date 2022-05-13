@@ -3,7 +3,7 @@
 
 > **Rust API & CLI for accessing the ipify.org HTTP API**
 
-[![CircleCI](https://circleci.com/gh/keltia/ipify-rs/tree/main.svg?style=shield)](https://circleci.com/gh/keltia/ipify-rs/tree/main)
+[![Cirrus-CI](https://api.cirrus-ci.com/github/keltia/ipify-rs.svg?branch=main)](https://cirrus-ci.org/keltia/ipify-rs)
 [![Crates.io](https://img.shields.io/crates/v/ipify-rs.svg)](https://crates.io/crates/ipify-rs)
 [![Docs](https://docs.rs/ipify-rs/badge.svg)](https://docs.rs/ipify-rs)
 [![GitHub release](https://img.shields.io/github/release/keltia/ipify-rs.svg)](https://github.com/keltia/ipify-rs/releases/)
