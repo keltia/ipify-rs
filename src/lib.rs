@@ -134,8 +134,8 @@ impl Ipify {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::net::IpAddr;
     use httpmock::prelude::*;
+    use std::net::IpAddr;
 
     #[test]
     fn test_set_1() {
@@ -180,10 +180,11 @@ mod tests {
         let server = MockServer::start();
 
         let m = server.mock(|when, then| {
-            when.method(GET)
-                            .header("user-agent", format!("{}/{}", crate_name!(), crate_version!()));
-            then.status(200)
-                .body("192.0.2.1");
+            when.method(GET).header(
+                "user-agent",
+                format!("{}/{}", crate_name!(), crate_version!()),
+            );
+            then.status(200).body("192.0.2.1");
         });
 
         let mut c = Ipify::new();

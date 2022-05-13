@@ -37,7 +37,7 @@ fn banner() -> String {
 }
 
 /// Start
-fn main() -> Result<(),()> {
+fn main() -> Result<(), ()> {
     let opts: Opts = Opts::parse();
 
     let v = !opts.quiet;
