@@ -13,6 +13,8 @@
 //!
 //! The full API is described below.
 
+use clap::{crate_name, crate_version};
+
 /// IPv4 endpoint, plain text
 const ENDPOINT4: &str = "https://api.ipify.org";
 /// IPv6 endpoint, plain text
@@ -121,7 +123,7 @@ impl Ipify {
     ///
     pub fn call(self) -> String {
         let c = reqwest::blocking::ClientBuilder::new()
-            .user_agent("ipify-cli/1.0.0")
+            .user_agent(format!("{}/{}", crate_name!(), crate_version!()))
             .build()
             .unwrap();
         c.get(self.endp).send().unwrap().text().unwrap()
