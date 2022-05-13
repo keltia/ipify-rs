@@ -149,7 +149,9 @@ mod tests {
 
     #[test]
     fn test_set_2() {
-        let c = Ipify::new().set(Op::IPv4J).set(Op::IPv6J);
+        let c = Ipify::new();
+
+        let c = c.set(Op::IPv4J).set(Op::IPv6J);
         assert_eq!(Op::IPv6J, c.t);
     }
 
