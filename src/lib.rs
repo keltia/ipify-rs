@@ -75,13 +75,13 @@ impl Ipify {
     /// ```
     /// use ipify_rs::*;
     ///
-    /// let mut a = Ipify::new();
+    /// let a = Ipify::new();
     ///
     /// println!("{}", a.call());
     /// ```
     ///
     pub fn new() -> Self {
-        Ipify {
+        Self {
             t: Op::IPv6,
             endp: ENDPOINT6.to_owned(),
         }
