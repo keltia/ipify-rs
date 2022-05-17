@@ -22,4 +22,3 @@ fn test_version() {
 
     cmd.arg("-V").assert().success();
 }
-
