@@ -129,6 +129,31 @@ impl Ipify {
             .unwrap();
         c.get(self.endp).send().unwrap().text().unwrap()
     }
+
+    /// Actually perform the API call (async version)
+    ///
+    /// Example:
+    /// ```
+    /// use ipify_rs::Ipify;
+    ///
+    /// let r = Ipify::new().call_async().await;
+    ///
+    /// println!("my ip = {}", r);
+    /// ```
+    ///
+    pub async fn call_async(self) -> String {
+        let c = reqwest::ClientBuilder::new()
+            .user_agent(format!("{}/{}", crate_name!(), crate_version!()))
+            .build()
+            .unwrap();
+        c.get(self.endp)
+            .send()
+            .await
+            .unwrap()
+            .text()
+            .await
+            .unwrap()
+    }
 }
 
 #[cfg(test)]
@@ -196,5 +221,32 @@ mod tests {
         m.assert();
         assert!(ip.is_ok());
         assert_eq!("192.0.2.1", str);
+    }
+
+    #[tokio::test]
+    async fn test_async_call() {
+        async_std::task::block_on(async {
+            let server = MockServer::start_async().await;
+
+            let m = server
+                .mock_async(|when, then| {
+                    when.method(GET).header(
+                        "user-agent",
+                        format!("{}/{}", crate_name!(), crate_version!()),
+                    );
+                    then.status(200).body("192.0.2.1");
+                })
+                .await;
+
+            let mut c = Ipify::new();
+            let b = server.base_url().clone();
+            c.endp = b.to_owned();
+            let str = c.call_async().await;
+
+            let ip = str.parse::<IpAddr>();
+            m.assert_async().await;
+            assert!(ip.is_ok());
+            assert_eq!("192.0.2.1", str);
+        });
     }
 }
