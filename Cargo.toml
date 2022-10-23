@@ -1,6 +1,6 @@
 [package]
 name = "ipify-rs"
-version = "0.6.0"
+version = "0.6.1"
 edition = "2021"
 authors = ["Ollivier Robert <roberto@keltia.net>"]
 keywords = ["ipify", "api", "client"]
