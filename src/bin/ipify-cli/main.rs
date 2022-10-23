@@ -8,9 +8,9 @@ pub(crate) const VERSION: &str = "0.4.0";
 
 /// Help message
 #[derive(Debug, Parser)]
+#[command(disable_version_flag = true)]
 #[clap(name = NAME, about = "Rust CLI for IPIFY API.")]
 #[clap(version = VERSION, author = crate_authors!())]
-#[clap(setting = AppSettings::NoAutoVersion)]
 struct Opts {
     /// Quiet mode
     #[clap(short = 'q', long)]
