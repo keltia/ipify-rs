@@ -136,8 +136,9 @@ impl Ipify {
     /// ```
     /// use ipify_rs::Ipify;
     ///
-    /// let r = Ipify::new().call_async().await;
-    ///
+    /// async {
+    ///     let r = Ipify::new().call_async().await;
+    /// }
     /// println!("my ip = {}", r);
     /// ```
     ///
