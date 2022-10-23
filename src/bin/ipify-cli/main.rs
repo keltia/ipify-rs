@@ -1,4 +1,4 @@
-use clap::{crate_authors, crate_name, crate_version, AppSettings, Parser};
+use clap::{crate_authors, crate_name, crate_version, Parser};
 use ipify_rs::{Ipify, Op};
 
 /// Binary name
