@@ -138,8 +138,8 @@ impl Ipify {
     ///
     /// async {
     ///     let r = Ipify::new().call_async().await;
+    ///     println!("my ip = {}", r);
     /// }
-    /// println!("my ip = {}", r);
     /// ```
     ///
     pub async fn call_async(self) -> String {
