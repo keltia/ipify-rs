@@ -56,17 +56,19 @@ fn main() -> Result<(), ()> {
     let mut op = Op::IPv6;
 
     if opts.ipv4 {
-        op = Op::IPv4;
+        op = Op::ForcedIPv4;
     }
 
     if opts.ipv6 {
-        op = Op::IPv6;
+        op = Op::ForcedIPv6;
     }
 
     if opts.json {
         op = match op {
             Op::IPv4 | Op::IPv4J => Op::IPv4J,
             Op::IPv6 | Op::IPv6J => Op::IPv6J,
+            Op::ForcedIPv4 | Op::ForcedIPv4J => Op::ForcedIPv4J,
+            Op::ForcedIPv6 | Op::ForcedIPv6J => Op::ForcedIPv6J,
         };
     }
 

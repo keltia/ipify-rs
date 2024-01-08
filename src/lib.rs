@@ -19,10 +19,18 @@ use clap::{crate_name, crate_version};
 const ENDPOINT4: &str = "https://api.ipify.org";
 /// IPv6 endpoint, plain text
 const ENDPOINT6: &str = "https://api64.ipify.org";
+/// Forced IPv4 endpoint, plain text
+const ENDPOINTFORCED4: &str = "https://api4.ipify.org";
+/// Forced IPv6 endpoint, plain text
+const ENDPOINTFORCED6: &str = "https://api6.ipify.org";
 /// IPv4 endpoint, JSON
 const ENDPOINT4J: &str = "https://api.ipify.org?format=json";
 /// IPv6 endpoint, JSON
 const ENDPOINT6J: &str = "https://api64.ipify.org?format=json";
+/// Forced IPv4 endpoint, JSON
+const ENDPOINTFORCED4J: &str = "https://api4.ipify.org?format=json";
+/// Forced IPv6 endpoint, JSON
+const ENDPOINTFORCED6J: &str = "https://api6.ipify.org?format=json";
 
 /// Minimalistic API
 ///
@@ -45,10 +53,18 @@ pub enum Op {
     IPv4,
     /// Plain text (default)
     IPv6,
+    /// Plain text
+    ForcedIPv4,
+    /// Plain text
+    ForcedIPv6,
     /// Json output
     IPv4J,
     /// Json output
     IPv6J,
+    /// Json output
+    ForcedIPv4J,
+    /// Json output
+    ForcedIPv6J,
 }
 
 /// The main API struct
@@ -105,8 +121,12 @@ impl Ipify {
             endp: match op {
                 Op::IPv4 => ENDPOINT4.to_owned(),
                 Op::IPv6 => ENDPOINT6.to_owned(),
+                Op::ForcedIPv4 => ENDPOINTFORCED4.to_owned(),
+                Op::ForcedIPv6 => ENDPOINTFORCED6.to_owned(),
                 Op::IPv4J => ENDPOINT4J.to_owned(),
                 Op::IPv6J => ENDPOINT6J.to_owned(),
+                Op::ForcedIPv4J => ENDPOINTFORCED4J.to_owned(),
+                Op::ForcedIPv6J => ENDPOINTFORCED6J.to_owned(),
             },
         }
     }
