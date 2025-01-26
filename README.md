@@ -5,6 +5,8 @@
 > **Rust API & CLI for accessing the ipify.org HTTP API**
 
 [![Cirrus-CI](https://api.cirrus-ci.com/github/keltia/ipify-rs.svg?branch=main)](https://cirrus-ci.org/keltia/ipify-rs)
+[![Build status](https://github.com/keltia/ipify-rs/actions/workflows/rust.yml/badge.svg)](https://github.com/keltia/ipify-rs/actions/workflows/rust.yml)
+[![Build status (develop)](https://github.com/keltia/ipify-rs/actions/workflows/develop.yml/badge.svg)](https://github.com/keltia/ipify-rs/actions/workflows/develop.yml)
 [![Crates.io](https://img.shields.io/crates/v/ipify-rs.svg)](https://crates.io/crates/ipify-rs)
 [![Docs](https://docs.rs/ipify-rs/badge.svg)](https://docs.rs/ipify-rs)
 [![GitHub release](https://img.shields.io/github/release/keltia/ipify-rs.svg)](https://github.com/keltia/ipify-rs/releases/)
