@@ -9,7 +9,7 @@ license = "MIT"
 readme = "README.md"
 description = "Rust crate for the ipify.org API."
 documentation = "https://docs.rs/ipify-rs"
-categories = [ "api-bindings", "command-line-utilities" ]
+categories = ["api-bindings", "command-line-utilities"]
 
 [package.metadata.docs.rs]
 all-features = true
@@ -21,12 +21,9 @@ maintenance = { status = "actively-developed" }
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-async-std = "1"
 clap = { version = "4", features = ["derive", "cargo"] }
-futures = "0"
 log = "0.4"
 reqwest = { version = "0.11", features = ["blocking"] }
-stderrlog = "0.5"
 tokio = { version = "1.29", features = ["full"] }
 
 [dev-dependencies]
