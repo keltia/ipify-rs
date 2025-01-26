@@ -36,7 +36,7 @@ const ENDPOINT6J: &str = "https://api64.ipify.org?format=json";
 ///
 #[inline]
 pub fn myip() -> String {
-    Ipify::new().call()
+    Ipify::new().set(Op::IPv6).call()
 }
 
 /// Enumeration for different types of operations provided by the Ipify API.
