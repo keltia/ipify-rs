@@ -1,3 +1,4 @@
+use eyre::Result;
 use ipify_rs::*;
 use log::info;
 
@@ -9,7 +10,7 @@ async fn doit() {
 }
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<()> {
     stderrlog::new()
         .module(module_path!())
         .verbosity(2)
@@ -17,14 +18,12 @@ async fn main() {
         .unwrap();
     info!("Start");
 
-    info!("Using default, minimal API");
-    println!("IP={}", myip());
-
     info!("Using defaults (ipv6)");
-    println!("IP={}", Ipify::new().call_async().await);
+    println!("IP={}", Ipify::new().call_async().await?);
 
     info!("Using defaults, get json");
-    println!("IP={}", Ipify::new().set(Op::IPv6J).call_async().await);
+    println!("IP={}", Ipify::new().set(Op::IPv6J).call_async().await?);
 
     doit().await;
+    Ok(())
 }

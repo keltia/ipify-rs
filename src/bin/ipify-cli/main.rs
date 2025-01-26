@@ -1,4 +1,5 @@
 use clap::{crate_authors, crate_name, crate_version, Parser};
+use eyre::Result;
 use ipify_rs::{Ipify, Op};
 
 /// Binary name
@@ -37,30 +38,30 @@ fn banner() -> String {
 }
 
 /// Start
-fn main() -> Result<(), ()> {
+fn main() -> Result<()> {
     let opts: Opts = Opts::parse();
 
-    let v = !opts.quiet;
+    let verbose = !opts.quiet;
 
     // Do not forget to set NoAutoVersion otherwise this is ignored
     if opts.version {
-        println!("{}", banner());
+        eprintln!("{}", banner());
         std::process::exit(0);
     }
 
-    if v {
-        println!("{}", banner())
+    if verbose {
+        eprintln!("{}", banner())
     }
 
     // Start with defaults
+    //
     let mut op = Op::IPv6;
-
     if opts.ipv4 {
         op = Op::IPv4;
     }
 
-    if opts.ipv6 {
-        op = Op::IPv6;
+    if opts.ipv6 && opts.ipv4 {
+        return Err(eyre::eyre!("You cannot specify both --ipv4 and --ipv6"));
     }
 
     if opts.json {
@@ -71,8 +72,8 @@ fn main() -> Result<(), ()> {
     }
 
     let c = Ipify::new();
-    let r = c.set(op).call();
-    if v {
+    let r = c.set(op).call()?;
+    if verbose {
         println!("My IP = {}", r);
     } else {
         println!("{}", r);
