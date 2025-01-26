@@ -1,6 +1,6 @@
 [package]
 name = "ipify-rs"
-version = "0.6.2"
+version = "0.7.0"
 edition = "2021"
 authors = ["Ollivier Robert <roberto@keltia.net>"]
 keywords = ["ipify", "api", "client"]
@@ -22,7 +22,7 @@ maintenance = { status = "actively-developed" }
 
 [dependencies]
 clap = { version = "4", features = ["derive", "cargo"] }
-eyre = "0.6.12"
+eyre = "0.6"
 reqwest = { version = "0.12", features = ["blocking"] }
 tokio = { version = "1", features = ["full"] }
 
