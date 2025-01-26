@@ -198,11 +198,11 @@ impl Ipify {
     /// ```rust
     /// use ipify_rs::Ipify;
     ///
-    /// let rt = tokio::runtime::Handle::current();
-    /// rt.block_on(async {
+    /// # #[tokio::main]
+    /// # async fn main() {
     ///     let ip = Ipify::new().call_async().await;
     ///     println!("My public IP address: {}", ip);
-    /// });
+    /// # }
     /// ```
     ///
     /// # Errors
