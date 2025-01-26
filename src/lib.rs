@@ -59,7 +59,7 @@ pub fn myip() -> String {
 /// let mut client = Ipify::new();
 /// client = client.set(Op::IPv4);
 ///
-/// println!("Public IPv4 address: {}", client.call());
+/// println!("Public IPv4 address: {}", client.call().unwrap());
 /// ```
 ///
 #[derive(Clone, Copy, Debug, PartialEq)]
@@ -95,7 +95,7 @@ pub enum Op {
 /// let mut client = Ipify::new();
 /// client = client.set(Op::IPv4);
 ///
-/// let ip = client.call();
+/// let ip = client.call().unwrap();
 /// println!("Public IPv4 address: {}", ip);
 /// ```
 ///
@@ -104,7 +104,7 @@ pub enum Op {
 /// ```rust
 /// use ipify_rs::Ipify;
 ///
-/// let ip = Ipify::new().call();
+/// let ip = Ipify::new().call().unwrap();
 /// println!("Public IPv6 address: {}", ip);
 /// ```
 ///
@@ -133,7 +133,7 @@ impl Ipify {
     ///
     /// let a = Ipify::new();
     ///
-    /// println!("{}", a.call());
+    /// println!("{}", a.call().unwrap());
     /// ```
     ///
     pub fn new() -> Self {
@@ -147,12 +147,15 @@ impl Ipify {
     ///
     /// # Example:
     /// ```rust
-    /// use ipify_rs::{Ipify, Op};
+    /// # fn main() -> eyre::Result<()> {
+    ///     use ipify_rs::{Ipify, Op};
     ///
-    /// let mut a = Ipify::new();
-    /// a.set(Op::IPv6J);
+    ///     let mut a = Ipify::new();
+    ///     a.set(Op::IPv6J);
     ///
-    /// println!("{}", a.call());
+    ///     println!("{}", a.call()?);
+    /// #     Ok(())
+    /// # }
     /// ```
     ///
     pub fn set(&self, op: Op) -> Self {
@@ -171,12 +174,13 @@ impl Ipify {
     ///
     /// # Example:
     /// ```rust
-    /// # fn main() {
-    /// use ipify_rs::Ipify;
+    /// # fn main() -> eyre::Result<()> {
+    ///     use ipify_rs::Ipify;
     ///
-    /// let r = Ipify::new().call()?;
+    ///     let r = Ipify::new().call()?;
     ///
-    /// println!("my ip = {}", r);
+    ///     println!("my ip = {}", r);
+    /// # Ok(())
     /// # }
     /// ```
     ///
@@ -198,12 +202,14 @@ impl Ipify {
     /// # Example
     ///
     /// ```rust
+    /// # use std::io::ErrorKind;
     /// use ipify_rs::Ipify;
     ///
     /// # #[tokio::main]
-    /// # async fn main() {
-    ///     let ip = Ipify::new().call_async().await;
+    /// # async fn main() -> eyre::Result<()> {
+    ///     let ip = Ipify::new().call_async().await?;
     ///     println!("My public IP address: {}", ip);
+    /// #   Ok(())
     /// # }
     /// ```
     ///

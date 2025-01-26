@@ -39,12 +39,14 @@ crates, they are all flawed in some way (only IPv4, not really cargo compliant, 
 You first create an instance of `Ipify` with `new()` set the result you want (IPv4, IPv6) and its format (plain text,
 json). Result is a string.
 
-```rs
-  use ipify_rs::{Ipify,Op};
-  
-  let ip = Ipify::new().set(Op::IPv4).call();
-  
-  println!("My IP is {}", ip);
+```rust
+fn main() {
+    use ipify_rs::{Ipify, Op};
+
+    let ip = Ipify::new().set(Op::IPv4).call().unwrap();
+
+    println!("My IP is {}", ip);
+}
 ```
 
 The four operations are specified as below:
