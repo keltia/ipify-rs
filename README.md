@@ -36,8 +36,10 @@ crates, they are all flawed in some way (only IPv4, not really cargo compliant, 
 
 ## API Usage
 
+**BREAKING CHANGE**: In v0.7 and later, `call()` and `call_async()` returns a `Result<String>` now.
+
 You first create an instance of `Ipify` with `new()` set the result you want (IPv4, IPv6) and its format (plain text,
-json). Result is a string.
+json). Result is a string inside a `Result`.
 
 ```rust
 fn main() {
@@ -144,6 +146,8 @@ Full description of the API with examples is on [docs.rs] as usual: [Ipify].
 
 Please see [CONTRIBUTING.md](CONTRIBUTING.md) for some simple rules.
 
+I am now using [Jujutsu] as my VCS. You can do the same or use Git Flow as before.
+
 I use Git Flow for this package so please use something similar or the usual github workflow.
 
 1. Fork it ( https://github.com/keltia/ipify-rs/fork )
@@ -152,3 +156,5 @@ I use Git Flow for this package so please use something similar or the usual git
 4. Commit your changes (`git commit -am 'Add some feature'`)
 5. Push to the branch (`git push origin my-new-feature`)
 6. Create a new Pull Request
+
+[Jujutsu]: https://jj-vcs.github.io/
