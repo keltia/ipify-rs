@@ -314,4 +314,68 @@ mod tests {
         assert!(ip.is_ok());
         assert_eq!("192.0.2.1", str);
     }
+
+    #[test]
+    fn test_set_to_ipv4j() {
+        let c = Ipify::new().set(Op::IPv4J);
+        assert_eq!(Op::IPv4J, c.t);
+        assert_eq!(ENDPOINT4J, c.endp);
+    }
+
+    #[test]
+    fn test_set_to_ipv6() {
+        let c = Ipify::new().set(Op::IPv6);
+        assert_eq!(Op::IPv6, c.t);
+        assert_eq!(ENDPOINT6, c.endp);
+    }
+
+    #[test]
+    fn test_call_ipv4() {
+        let server = MockServer::start();
+
+        let m = server.mock(|when, then| {
+            when.method(GET);
+            then.status(200).body("203.0.113.1");
+        });
+
+        let mut c = Ipify::new().set(Op::IPv4);
+        c.endp = server.base_url();
+        let response = c.call();
+
+        m.assert();
+        assert_eq!("203.0.113.1", response);
+    }
+
+    #[tokio::test]
+    async fn test_async_call_with_ipv6j() {
+        let server = MockServer::start_async().await;
+
+        let m = server
+            .mock_async(|when, then| {
+                when.method(GET);
+                then.status(200).body("{\"ip\":\"2001:db8::2\"}");
+            })
+            .await;
+
+        let mut c = Ipify::new().set(Op::IPv6J);
+        c.endp = server.base_url();
+        let response = c.call_async().await;
+
+        m.assert_async().await;
+        assert_eq!("{\"ip\":\"2001:db8::2\"}", response);
+    }
+
+    #[test]
+    fn test_default_values() {
+        let c = Ipify::new();
+        assert_eq!(Op::IPv6, c.t);
+        assert_eq!(ENDPOINT6, c.endp);
+    }
+
+    #[test]
+    fn test_chaining_set_calls() {
+        let c = Ipify::new().set(Op::IPv4).set(Op::IPv4J).set(Op::IPv6);
+        assert_eq!(Op::IPv6, c.t);
+        assert_eq!(ENDPOINT6, c.endp);
+    }
 }
