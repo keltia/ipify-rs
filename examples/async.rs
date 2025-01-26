@@ -17,9 +17,6 @@ async fn main() {
         .unwrap();
     info!("Start");
 
-    info!("Using default, minimal API");
-    println!("IP={}", myip());
-
     info!("Using defaults (ipv6)");
     println!("IP={}", Ipify::new().call_async().await);
 

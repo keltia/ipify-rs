@@ -40,16 +40,16 @@ fn banner() -> String {
 fn main() -> Result<(), ()> {
     let opts: Opts = Opts::parse();
 
-    let v = !opts.quiet;
+    let verbose = !opts.quiet;
 
     // Do not forget to set NoAutoVersion otherwise this is ignored
     if opts.version {
-        println!("{}", banner());
+        eprintln!("{}", banner());
         std::process::exit(0);
     }
 
-    if v {
-        println!("{}", banner())
+    if verbose {
+        eprintln!("{}", banner())
     }
 
     // Start with defaults
@@ -72,7 +72,7 @@ fn main() -> Result<(), ()> {
 
     let c = Ipify::new();
     let r = c.set(op).call();
-    if v {
+    if verbose {
         println!("My IP = {}", r);
     } else {
         println!("{}", r);

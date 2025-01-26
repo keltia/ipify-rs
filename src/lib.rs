@@ -4,8 +4,9 @@
 //!
 //! The fastest way to use it is to use the `myip()` wrapper:
 //!
-//! Example:
-//! ```
+//! # Example:
+//!
+//! ```rust
 //! use ipify_rs::myip;
 //!
 //! println!("My IP is: {}", myip());
@@ -35,10 +36,31 @@ const ENDPOINT6J: &str = "https://api64.ipify.org?format=json";
 ///
 #[inline]
 pub fn myip() -> String {
-    Ipify::new().call()
+    Ipify::new().set(Op::IPv6).call()
 }
 
-/// The current set of operations
+/// Enumeration for different types of operations provided by the Ipify API.
+///
+/// Each variant corresponds to a specific operation or request type.
+///
+/// # Variants
+///
+/// * `IPv4` - Retrieves the IPv4 address in plain text format.
+/// * `IPv6` - Retrieves the IPv6 address in plain text format (default).
+/// * `IPv4J` - Retrieves the IPv4 address in JSON format.
+/// * `IPv6J` - Retrieves the IPv6 address in JSON format.
+///
+/// # Examples
+///
+/// ```
+/// use ipify_rs::{Ipify, Op};
+///
+/// let mut client = Ipify::new();
+/// client = client.set(Op::IPv4);
+///
+/// println!("Public IPv4 address: {}", client.call());
+/// ```
+///
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum Op {
     /// Plain text
@@ -52,6 +74,39 @@ pub enum Op {
 }
 
 /// The main API struct
+///
+/// This struct represents a client for interacting with the Ipify API.
+/// It allows users to configure and perform operations for retrieving
+/// their public IP addresses, either in plain text or JSON format.
+///
+/// # Fields
+///
+/// * `t` - The current operation to perform (e.g., IPv4, IPv6, JSON outputs).
+/// * `endp` - The API endpoint used for the operation.
+///
+/// # Examples
+///
+/// Basic usage:
+///
+/// ```rust
+/// use ipify_rs::{Ipify, Op};
+///
+/// let mut client = Ipify::new();
+/// client = client.set(Op::IPv4);
+///
+/// let ip = client.call();
+/// println!("Public IPv4 address: {}", ip);
+/// ```
+///
+/// Using the default settings (IPv6):
+///
+/// ```rust
+/// use ipify_rs::Ipify;
+///
+/// let ip = Ipify::new().call();
+/// println!("Public IPv6 address: {}", ip);
+/// ```
+///
 #[derive(Clone, Debug)]
 pub struct Ipify {
     /// Current type of operation
@@ -71,7 +126,7 @@ impl Default for Ipify {
 impl Ipify {
     /// Create a new API instance client with the defaults
     ///
-    /// Example:
+    /// # Example:
     /// ```
     /// use ipify_rs::*;
     ///
@@ -89,8 +144,8 @@ impl Ipify {
 
     /// Specify the subsequent operation to perform on `call()`
     ///
-    /// Examples:
-    /// ```
+    /// # Example:
+    /// ```rust
     /// use ipify_rs::{Ipify, Op};
     ///
     /// let mut a = Ipify::new();
@@ -113,8 +168,8 @@ impl Ipify {
 
     /// Actually perform the API call
     ///
-    /// Example:
-    /// ```
+    /// # Example:
+    /// ```rust
     /// use ipify_rs::Ipify;
     ///
     /// let r = Ipify::new().call();
@@ -130,30 +185,41 @@ impl Ipify {
         c.get(self.endp).send().unwrap().text().unwrap()
     }
 
-    /// Actually perform the API call (async version)
     ///
-    /// Example:
-    /// ```
+    /// Perform the API call asynchronously to retrieve the IP address.
+    ///
+    /// This function communicates with the configured `Ipify` endpoint, sending an
+    /// HTTP GET request and retrieving the response body as a string. The result of
+    /// the call is typically a public IP address of the client in either plain text
+    /// or JSON format, based on the selected operation (`Op`).
+    ///
+    /// # Example
+    ///
+    /// ```rust
     /// use ipify_rs::Ipify;
     ///
-    /// async {
-    ///     let r = Ipify::new().call_async().await;
-    ///     println!("my ip = {}", r);
-    /// }
+    /// # #[tokio::main]
+    /// # async fn main() {
+    ///     let ip = Ipify::new().call_async().await;
+    ///     println!("My public IP address: {}", ip);
+    /// # }
     /// ```
+    ///
+    /// # Errors
+    ///
+    /// This function will panic if:
+    /// - The HTTP client fails to build properly (e.g., invalid user-agent).
+    /// - The GET request to the endpoint fails (e.g., network error or invalid endpoint).
+    /// - The response cannot be transformed into a plain string (e.g., invalid encoding).
+    ///
+    /// To avoid panics, consider handling errors explicitly by using a custom implementation that propagates errors instead of unwrapping results.
     ///
     pub async fn call_async(self) -> String {
         let c = reqwest::ClientBuilder::new()
             .user_agent(format!("{}/{}", crate_name!(), crate_version!()))
             .build()
             .unwrap();
-        c.get(self.endp)
-            .send()
-            .await
-            .unwrap()
-            .text()
-            .await
-            .unwrap()
+        c.get(self.endp).send().await.unwrap().text().await.unwrap()
     }
 }
 
@@ -226,28 +292,90 @@ mod tests {
 
     #[tokio::test]
     async fn test_async_call() {
-        async_std::task::block_on(async {
-            let server = MockServer::start_async().await;
+        let server = MockServer::start_async().await;
 
-            let m = server
-                .mock_async(|when, then| {
-                    when.method(GET).header(
-                        "user-agent",
-                        format!("{}/{}", crate_name!(), crate_version!()),
-                    );
-                    then.status(200).body("192.0.2.1");
-                })
-                .await;
+        let m = server
+            .mock_async(|when, then| {
+                when.method(GET).header(
+                    "user-agent",
+                    format!("{}/{}", crate_name!(), crate_version!()),
+                );
+                then.status(200).body("192.0.2.1");
+            })
+            .await;
 
-            let mut c = Ipify::new();
-            let b = server.base_url().clone();
-            c.endp = b.to_owned();
-            let str = c.call_async().await;
+        let mut c = Ipify::new();
+        let b = server.base_url().clone();
+        c.endp = b.to_owned();
+        let str = c.call_async().await;
 
-            let ip = str.parse::<IpAddr>();
-            m.assert_async().await;
-            assert!(ip.is_ok());
-            assert_eq!("192.0.2.1", str);
+        let ip = str.parse::<IpAddr>();
+        m.assert_async().await;
+        assert!(ip.is_ok());
+        assert_eq!("192.0.2.1", str);
+    }
+
+    #[test]
+    fn test_set_to_ipv4j() {
+        let c = Ipify::new().set(Op::IPv4J);
+        assert_eq!(Op::IPv4J, c.t);
+        assert_eq!(ENDPOINT4J, c.endp);
+    }
+
+    #[test]
+    fn test_set_to_ipv6() {
+        let c = Ipify::new().set(Op::IPv6);
+        assert_eq!(Op::IPv6, c.t);
+        assert_eq!(ENDPOINT6, c.endp);
+    }
+
+    #[test]
+    fn test_call_ipv4() {
+        let server = MockServer::start();
+
+        let m = server.mock(|when, then| {
+            when.method(GET);
+            then.status(200).body("203.0.113.1");
         });
+
+        let mut c = Ipify::new().set(Op::IPv4);
+        c.endp = server.base_url();
+        let response = c.call();
+
+        m.assert();
+        assert_eq!("203.0.113.1", response);
+    }
+
+    #[tokio::test]
+    async fn test_async_call_with_ipv6j() {
+        let server = MockServer::start_async().await;
+
+        let m = server
+            .mock_async(|when, then| {
+                when.method(GET);
+                then.status(200).body("{\"ip\":\"2001:db8::2\"}");
+            })
+            .await;
+
+        let mut c = Ipify::new().set(Op::IPv6J);
+        c.endp = server.base_url();
+        let response = c.call_async().await;
+
+        m.assert_async().await;
+        assert_eq!("{\"ip\":\"2001:db8::2\"}", response);
+    }
+
+    #[test]
+    fn test_default_values() {
+        let c = Ipify::new();
+        assert_eq!(Op::IPv6, c.t);
+        assert_eq!(ENDPOINT6, c.endp);
+    }
+
+    #[test]
+    fn test_chaining_set_calls() {
+        let c = Ipify::new().set(Op::IPv4).set(Op::IPv4J).set(Op::IPv6);
+        assert_eq!(Op::IPv6, c.t);
+        assert_eq!(ENDPOINT6, c.endp);
     }
 }
