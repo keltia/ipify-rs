@@ -1,3 +1,4 @@
+use eyre::Result;
 use ipify_rs::*;
 use log::info;
 
@@ -8,7 +9,7 @@ fn doit() {
     println!("IP6={:?}", ip.set(Op::IPv6).call());
 }
 
-fn main() {
+fn main() -> Result<()> {
     stderrlog::new()
         .module(module_path!())
         .verbosity(2)
@@ -20,10 +21,11 @@ fn main() {
     println!("IP={}", myip());
 
     info!("Using defaults (ipv6)");
-    println!("IP={}", Ipify::new().call());
+    println!("IP={}", Ipify::new().call()?);
 
     info!("Using defaults, get json");
-    println!("IP={}", Ipify::new().set(Op::IPv6J).call());
+    println!("IP={}", Ipify::new().set(Op::IPv6J).call()?);
 
     doit();
+    Ok(())
 }
