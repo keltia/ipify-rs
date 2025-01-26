@@ -22,6 +22,7 @@ maintenance = { status = "actively-developed" }
 
 [dependencies]
 clap = { version = "4", features = ["derive", "cargo"] }
+eyre = "0.6.12"
 reqwest = { version = "0.12", features = ["blocking"] }
 tokio = { version = "1", features = ["full"] }
 

@@ -15,6 +15,7 @@
 //! The full API is described below.
 
 use clap::{crate_name, crate_version};
+use eyre::Result;
 
 /// IPv4 endpoint, plain text
 const ENDPOINT4: &str = "https://api.ipify.org";
@@ -36,7 +37,7 @@ const ENDPOINT6J: &str = "https://api64.ipify.org?format=json";
 ///
 #[inline]
 pub fn myip() -> String {
-    Ipify::new().set(Op::IPv6).call()
+    Ipify::new().set(Op::IPv6).call().unwrap()
 }
 
 /// Enumeration for different types of operations provided by the Ipify API.
@@ -170,19 +171,20 @@ impl Ipify {
     ///
     /// # Example:
     /// ```rust
+    /// # fn main() {
     /// use ipify_rs::Ipify;
     ///
-    /// let r = Ipify::new().call();
+    /// let r = Ipify::new().call()?;
     ///
     /// println!("my ip = {}", r);
+    /// # }
     /// ```
     ///
-    pub fn call(self) -> String {
+    pub fn call(self) -> Result<String> {
         let c = reqwest::blocking::ClientBuilder::new()
             .user_agent(format!("{}/{}", crate_name!(), crate_version!()))
-            .build()
-            .unwrap();
-        c.get(self.endp).send().unwrap().text().unwrap()
+            .build()?;
+        Ok(c.get(self.endp).send()?.text()?)
     }
 
     ///
@@ -214,12 +216,11 @@ impl Ipify {
     ///
     /// To avoid panics, consider handling errors explicitly by using a custom implementation that propagates errors instead of unwrapping results.
     ///
-    pub async fn call_async(self) -> String {
+    pub async fn call_async(self) -> Result<String> {
         let c = reqwest::ClientBuilder::new()
             .user_agent(format!("{}/{}", crate_name!(), crate_version!()))
-            .build()
-            .unwrap();
-        c.get(self.endp).send().await.unwrap().text().await.unwrap()
+            .build()?;
+        Ok(c.get(self.endp).send().await?.text().await?)
     }
 }
 
@@ -283,6 +284,8 @@ mod tests {
         let b = server.base_url().clone();
         c.endp = b.to_owned();
         let str = c.call();
+        assert!(str.is_ok());
+        let str = str.unwrap();
 
         let ip = str.parse::<IpAddr>();
         m.assert();
@@ -308,6 +311,8 @@ mod tests {
         let b = server.base_url().clone();
         c.endp = b.to_owned();
         let str = c.call_async().await;
+        assert!(str.is_ok());
+        let str = str.unwrap();
 
         let ip = str.parse::<IpAddr>();
         m.assert_async().await;
@@ -340,10 +345,12 @@ mod tests {
 
         let mut c = Ipify::new().set(Op::IPv4);
         c.endp = server.base_url();
-        let response = c.call();
+        let str = c.call();
+        assert!(str.is_ok());
+        let str = str.unwrap();
 
         m.assert();
-        assert_eq!("203.0.113.1", response);
+        assert_eq!("203.0.113.1", str);
     }
 
     #[tokio::test]
@@ -359,10 +366,12 @@ mod tests {
 
         let mut c = Ipify::new().set(Op::IPv6J);
         c.endp = server.base_url();
-        let response = c.call_async().await;
+        let str = c.call_async().await;
+        assert!(str.is_ok());
+        let str = str.unwrap();
 
         m.assert_async().await;
-        assert_eq!("{\"ip\":\"2001:db8::2\"}", response);
+        assert_eq!("{\"ip\":\"2001:db8::2\"}", str);
     }
 
     #[test]
